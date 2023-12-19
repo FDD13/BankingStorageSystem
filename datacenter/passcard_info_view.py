@@ -1,21 +1,31 @@
+from django.db.models import Model
 from datacenter.models import Passcard
 from datacenter.models import Visit
 from django.shortcuts import render
-
+from django.http import Http404
+from django.shortcuts import get_object_or_404
+ 
 
 def passcard_info_view(request, passcode):
-    passcard = Passcard.objects.all()[0]
-    # Программируем здесь
+    employee_passcard = get_object_or_404(Passcard, passcode=passcode)
+    employee_visits = Visit.objects.filter(passcard=employee_passcard)
+    this_passcard_visits = []
 
-    this_passcard_visits = [
-        {
-            'entered_at': '11-04-2018',
-            'duration': '25:03',
-            'is_strange': False
-        },
-    ]
+    
+    for employee_visit in employee_visits:
+        suspicion = Visit.is_visit_long(employee_visit)
+        difference = Visit.get_duration(employee_visit)
+        formed_duration = Visit.format_duration(employee_visit)
+        passcard_visit = {
+            'entered_at': employee_visit.entered_at,
+            'duration': formed_duration,
+            'is_strange': suspicion
+            }
+        this_passcard_visits.append(passcard_visit)
+
+        
     context = {
-        'passcard': passcard,
+        'passcard': employee_passcard,
         'this_passcard_visits': this_passcard_visits
     }
     return render(request, 'passcard_info.html', context)
