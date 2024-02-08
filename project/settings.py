@@ -2,28 +2,23 @@ import os
 from environs import Env
 from pathlib import Path
 
+
 env = Env()
 env.read_env()
 
 
-engine = env('ENGINE')
-host = env('HOST')
-port = env.int('PORT')
-name = env('NAME')
-user = env('USER')
-password = env('PASSWORD')
-
 
 DATABASES = {
     'default': {
-        'ENGINE': engine,
-        'HOST': host,
-        'PORT': port,
-        'NAME': name,
-        'USER': user,
-        'PASSWORD': password,
+        'DB_ENGINE': env('DB_ENGINE'),
+        'DB_HOST': env('DB_HOST'),
+        'DB_PORT': env('DB_PORT'),
+        'DB_NAME': env('DB_NAME'),
+        'DB_USER': env('DB_USER'),
+        'DB_PASSWORD': env('DB_PASSWORD'),
     }
 }
+
 
 INSTALLED_APPS = ['datacenter']
 
@@ -33,7 +28,7 @@ DEBUG = env.bool("DEBUG")
 
 ROOT_URLCONF = 'project.urls'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 
 
