@@ -18,7 +18,26 @@ __Переменные окружения__
 ```
 pip install environs
 ```
-Библиотека поможет использовать информацию из баз данных. Этот подход также облегчает ротацию ключей и паролей без необходимости изменения кода
+Библиотека поможет использовать информацию из баз данных. Файл env хранит данные секретного ключа и список хостов, для которых может работать текущий сайт,
+```
+SECRET_KEY = env.str('SECRET_KEY')
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+```
+а также переменные баз данных:
+```
+DATABASES = {
+    'default': {
+        'ENGINE': env.str('DB_ENGINE'),
+        'HOST': env.str('DB_HOST'),
+        'PORT': env.int('DB_PORT'),
+        'NAME': env.str('DB_NAME'),
+        'USER': env.str('DB_USER'),
+        'PASSWORD': env.str('DB_PASSWORD'),
+    }
+}
+```
+
+
 
 ---
 
